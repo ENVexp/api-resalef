@@ -30,8 +30,8 @@ app.get('/lista', async(req, res)=>{
        // 'http://chead.cc/player_api.php?username=Ronnyy&password=root@2424&action=get_live_streams'
     )
     const list = response.data.map(item =>{
-        return {...item}
-       // return {...item, stream_icon: `https://${host}/resource?path=${item.stream_icon}`}
+       // return {...item}
+        return {...item, stream_icon: `https://${host}/resource?path=${item.stream_icon}`}
     })
     res.set(response.headers);
     res.set('Content-Type', 'application/json');
