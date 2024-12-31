@@ -6,7 +6,7 @@ import cors from 'cors';
 //const axios = require('axios');
 //const cors = require("cors");
 const dns = 'http://chead.cc:80/';
-const app = express();
+export const app = express();
 
 
 
@@ -72,4 +72,4 @@ app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
 
-export{ app };
+//export{ app };
