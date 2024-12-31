@@ -1,13 +1,20 @@
-const express = require('express');
-const axios = require('axios');
-const cors = require("cors");
+import { listMovies } from './service.js';
+import { Axios } from 'axios';
+import express from 'express';
+import cors from 'cors';
+//const express = require('express');
+//const axios = require('axios');
+//const cors = require("cors");
 const dns = 'http://chead.cc:80/';
 const app = express();
+
+
+
 app.use(cors());
 
 app.get('/teste', async (req, res)=>{
     try {
-        const response = await axios.get(
+        const response = await Axios.get(
             dns+"movie/Ronnyy/root@2424/990540.mp4",
             {
             responseType: 'stream'
@@ -23,7 +30,9 @@ app.get('/teste', async (req, res)=>{
 })
 
 app.get('/lista', async(req, res)=>{
-    const host = req.hostname;
+
+    listMovies(req, res);
+   /* const host = req.hostname;
 
     const response = await axios.get(
         'http://chead.cc/player_api.php?username=Ronnyy&password=root@2424&action=get_vod_streams'
@@ -36,7 +45,7 @@ app.get('/lista', async(req, res)=>{
     res.set(response.headers);
     res.set('Content-Type', 'application/json');
     res.json(list);
-   // res.send(list);
+   // res.send(list);*/
 })
 
 app.get('/resource', async (req, res)=>{
@@ -44,7 +53,7 @@ app.get('/resource', async (req, res)=>{
     //res.json({path: req.query.path, host: req.hostname})
     
     try {
-    const response = await axios.get(
+    const response = await Axios.get(
         url,
         {responseType: 'stream'}
     );
@@ -63,4 +72,4 @@ app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
 
-module.exports = app;
+export{ app };
