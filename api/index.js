@@ -24,7 +24,8 @@ app.get('/lista', async(req, res)=>{
     const host = req.hostname;
 
     const response = await axios.get(
-        'http://chead.cc/player_api.php?username=Ronnyy&password=root@2424&action=get_live_streams'
+        'http://chead.cc/player_api.php?username=Ronnyy&password=root@2424&action=get_vod_streams'
+       // 'http://chead.cc/player_api.php?username=Ronnyy&password=root@2424&action=get_live_streams'
     )
     const list = response.data.map(item =>{
         return {...item, stream_icon: `https://${host}/resource?path=${item.stream_icon}`}
@@ -37,11 +38,10 @@ app.get('/resource', async (req, res)=>{
     //res.json({path: req.query.path, host: req.hostname})
     
     try {
-        const response = await axios.get(
-            url,
-            {
-            responseType: 'stream'
-        });
+    const response = await axios.get(
+        url,
+        {responseType: 'stream'}
+    );
 
         res.setHeader('Content-Type', response.headers['content-type'] || 'application/octet-stream');
         res.setHeader('Content-Length', response.headers['content-length'] || undefined);
