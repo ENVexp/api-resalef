@@ -30,7 +30,10 @@ app.get('/lista', async(req, res)=>{
     const list = response.data.map(item =>{
         return {...item, stream_icon: `https://${host}/resource?path=${item.stream_icon}`}
     })
-    res.send(list)
+    res.set(response.headers);
+    res.set('Content-Type', 'application/json');
+    res.json(list);
+   // res.send(list);
 })
 
 app.get('/resource', async (req, res)=>{
