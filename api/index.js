@@ -1,7 +1,9 @@
 const express = require('express');
 const axios = require('axios');
+const cors = require("cors");
 const dns = 'http://chead.cc:80/';
 const app = express();
+app.use(cors());
 
 app.get('/teste', async (req, res)=>{
     try {
