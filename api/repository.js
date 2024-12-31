@@ -1,7 +1,12 @@
+
+
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 const axios = require('axios');
-const dns = process.env.DNS || 'http://chead.cc:80/';
-const username = process.env.USER_NAME || 'Ronnyy';
-const password = process.env.PASSWORD || 'root@2424';
+const dns = process.env.DNS;
+const username = process.env.USER_NAME;
+const password = process.env.PASSWORD;
 
 function getAllMovies() {
     const url = `${dns}player_api.php?username=${username}&password=${password}&action=get_vod_streams`;
