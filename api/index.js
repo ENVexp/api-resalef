@@ -1,12 +1,11 @@
-import { listMovies } from './service.js';
-import { Axios } from 'axios';
-import express from 'express';
-import cors from 'cors';
-//const express = require('express');
-//const axios = require('axios');
-//const cors = require("cors");
+const { listMovies } = require('./service.js');
+//import express from 'express';
+//import cors from 'cors';
+const express = require('express');
+const axios = require('axios');
+const cors = require("cors");
 const dns = 'http://chead.cc:80/';
-export const app = express();
+const app = express();
 
 
 
@@ -72,4 +71,4 @@ app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
 
-//export{ app };
+module.exports = app;

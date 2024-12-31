@@ -1,4 +1,4 @@
-import  axios  from 'axios';
+const axios = require('axios');
 const dns = process.env.DNS || 'http://chead.cc:80/';
 const username = process.env.USER_NAME || 'Ronnyy';
 const password = process.env.PASSWORD || 'root@2424';
@@ -17,4 +17,4 @@ function stream(url) {
     return axios.get(url, { responseType: 'stream' })
 }
 
-export { getAllMovies, getAllChannels, stream }
+module.exports = { getAllMovies, getAllChannels, stream }

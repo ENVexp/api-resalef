@@ -1,5 +1,5 @@
-import { getAllMovies } from "./repository.js"
-import { isHttps } from "./utils.js";
+const { getAllMovies } = require("./repository.js");
+const { isHttps } = require("./utils.js");
 
 async function listMovies(request, response){
     const res = await getAllMovies();
@@ -13,4 +13,4 @@ async function listMovies(request, response){
     response.json(list);
 }
 
-export { listMovies }
+module.exports = { listMovies }

@@ -1,7 +1,9 @@
-export function isHttps(url) {
+function isHttps(url) {
     try {
         return new URL(url).protocol === 'https:';
     } catch (error) {
         return false;
     }
 }
+
+module.exports = {isHttps};
