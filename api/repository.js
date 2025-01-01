@@ -1,6 +1,6 @@
 
-
-if (process.env.NODE_ENV !== 'production') {
+/*if (process.env.NODE_ENV !== 'production') {
+    console.log(process.env.NODE_ENV + ' sasas')
     require('dotenv').config();
 }
 const axios = require('axios');
@@ -20,6 +20,43 @@ function getAllChannels() {
 
 function stream(url) {
     return axios.get(url, { responseType: 'stream' })
+}*/
+
+const Utils = require('./utils.js')
+
+class Client {
+
+    #axios;
+    #dns;
+    #username;
+    #password;
+
+    constructor() {
+        if (process.env.NODE_ENV !== 'production') {
+            require('dotenv').config();
+        }
+        this.#axios = require('axios');
+        this.#dns = process.env.DNS;
+        this.#username = process.env.USER_NAME;
+        this.#password = process.env.PASSWORD;
+    }
+
+    getAllMovies() {
+        return this.#axios.get(
+            Utils.getMoviesUrl(this.#dns, this.#username, this.#password)
+        );
+    }
+
+    getAllChannels() {
+        return this.#axios.get(
+            Utils.getChannelsUrl(this.#dns, this.#username, this.#password)
+        );
+    }
+
+    getStream(url) {
+        return this.#axios.get(url, { responseType: 'stream' })
+    }
 }
 
-module.exports = { getAllMovies, getAllChannels, stream }
+module.exports = new Client();
+//module.exports = { getAllMovies, getAllChannels, stream }
