@@ -46,7 +46,9 @@ middlewares = [
         }
     }
 ];
-app.use(config.baseUrl, express.static('public'));
+//app.use(config.baseUrl, express.static('public'));
+app.use(express.static('public'));
+
 app.use(cors());
 //apply middlewares
 middlewares.forEach(middleware => app.use(middleware));
