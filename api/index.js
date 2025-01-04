@@ -1,92 +1,61 @@
 const express = require('express');
 const cors = require("cors");
 const app = express();
-const base = '/easyapp/api';
-const router = require('./controller.js').getRouter();
-
-app.use(base, router)
-
-
+const config = require('./config.js');
+const controller = require('./controller.js');
+const token = require('./token.js');
+const router = controller.getRouter();
+middlewares = [
+    (req, res, next) => {
+        if (config.serviceOn === 'true') {
+           next();
+        } else {
+            res.status(500).json({ message: 'Serviço indisponivel' })
+        }
+    },
+    //token rules
+    (req, res, next) => {
+        const clearPath = req.path.replaceAll(config.baseUrl, '').replace(/\/$/, '');
+        console.log(clearPath)
+        switch (clearPath) {
+            case '/login':
+            case '/routers':
+                req.requireToken = false;
+                break;
+            default:
+                req.requireToken = true;
+        }
+        next();
+    },
+    //resolve token
+    (req, res, next) => {
+        if (req.requireToken) {
+            if (req.query.token) {
+                try {
+                    req.token = token.decode(req.query.token);
+                    next();
+                } catch (error) {
+                    res.status(401).json({ message: 'Token invalido' })
+                }
+            } else {
+                res.status(401).json({ message: 'token é obrigatorio' })
+            }
+        } else {
+            next();
+        }
+    }
+];
+app.use(config.baseUrl, express.static('html'));
 app.use(cors());
+//apply middlewares
+middlewares.forEach(middleware => app.use(middleware));
+app.use(config.baseUrl, router);
 
-const port = process.env.PORT || 3000;
 
+
+const port = config.port;
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
 
 module.exports = app;
-
-/*const { listMovies } = require('./service.js');
-//import express from 'express';
-//import cors from 'cors';
-const express = require('express');
-const cors = require("cors");
-const dns = 'http://chead.cc:80/';
-const app = express();
-
-
-
-app.use(cors());
-
-app.get('/teste', async (req, res)=>{
-    try {
-        const response = await Axios.get(
-            dns+"movie/Ronnyy/root@2424/990540.mp4",
-            {
-            responseType: 'stream'
-        });
-
-        res.setHeader('Content-Type', response.headers['content-type'] || 'application/octet-stream');
-        res.setHeader('Content-Length', response.headers['content-length'] || undefined);
-
-        response.data.pipe(res);
-    } catch (error) {
-        res.status(500).json({ error: 'Erro', details: error.message });
-    }
-})
-
-app.get('/lista', async(req, res)=>{
-
-    listMovies(req, res);
-    const host = req.hostname;
-
-    const response = await axios.get(
-        'http://chead.cc/player_api.php?username=Ronnyy&password=root@2424&action=get_vod_streams'
-       // 'http://chead.cc/player_api.php?username=Ronnyy&password=root@2424&action=get_live_streams'
-    )
-    const list = response.data.map(item =>{
-       // return {...item}
-        return {...item, stream_icon: `https://${host}/resource?path=${item.stream_icon}`}
-    })
-    res.set(response.headers);
-    res.set('Content-Type', 'application/json');
-    res.json(list);
-   // res.send(list);
-})
-
-app.get('/resource', async (req, res)=>{
-    const url = req.query.path;
-    //res.json({path: req.query.path, host: req.hostname})
-    
-    try {
-    const response = await Axios.get(
-        url,
-        {responseType: 'stream'}
-    );
-
-        res.setHeader('Content-Type', response.headers['content-type'] || 'application/octet-stream');
-        res.setHeader('Content-Length', response.headers['content-length'] || undefined);
-
-        response.data.pipe(res);
-    } catch (error) {
-        res.status(500).json({ error: 'Erro', details: error.message });
-    }
-})
-
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
-
-module.exports = app;*/
