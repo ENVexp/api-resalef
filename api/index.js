@@ -20,6 +20,7 @@ middlewares = [
         switch (clearPath) {
             case '/login':
             case '/routers':
+            case '/token.html':
                 req.requireToken = false;
                 break;
             default:
