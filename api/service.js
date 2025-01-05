@@ -182,9 +182,9 @@ class Service {
             response.status(200).json(
                 res.data.map(serie => {
                     const icon = serie.cover;
-                    if (Utils.isHttps(icon)) {
+                   /* if (Utils.isHttps(icon)) {
                         return serie;
-                    }
+                    }*/
                     return {
                         ...serie,
                         cover: client.urls.resource(request.hostname, icon, request.query.token)
