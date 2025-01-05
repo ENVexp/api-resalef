@@ -88,6 +88,7 @@ import Utils from './utils.js';
 import client from './client.js';
 import config from './config.js';
 import path from 'path';
+import token from './token.js';
 import { fileURLToPath } from 'url';
 
 // Simula o __dirname
@@ -126,7 +127,6 @@ class Service {
                     if (res.data.user_info.auth == 0) {
                         response.status(401).json({ message: 'Credenciais de acesso invalidas' });
                     } else {
-                        const token = require('./token.js');
                         response.status(200).json({
                             username: res.data.user_info.username,
                             message: res.data.user_info.message,

@@ -71,7 +71,7 @@ class Controller {
     }
 
     init() {
-        this.#get('/token', service.token)
+        this.#get('/generateToken', service.token)
         this.#get('/movies', service.listMovies);
         this.#get('/resource', service.loadResource);
         this.#get('/userinfo', service.userInfo);
