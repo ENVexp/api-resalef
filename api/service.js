@@ -101,6 +101,8 @@ class Service {
         //permite ser usado como callback
         this.login = this.login.bind(this);
         this.listMovies = this.listMovies.bind(this);
+        this.listSeries = this.listSeries.bind(this);
+        this.listChannels = this.listChannels.bind(this);
         this.listMoviesCategory = this.listMoviesCategory.bind(this);
         this.listChannelsCategory = this.listChannelsCategory.bind(this);
         this.listSeriesCategory = this.listSeriesCategory.bind(this);
@@ -156,19 +158,65 @@ class Service {
 
     async listMovies(request, response) {
         const res = await client.getAllMovies(JSON.parse(request.token));
-        response.json(
-            res.data.map(movie => {
-                const icon = movie.stream_icon;
-                if (Utils.isHttps(icon)) {
-                    return movie;
-                }
-                return {
-                    ...movie,
-                    stream_icon: client.urls.resource(request.hostname, icon, request.query.token)
-                }
-            })
-        );
+        try{
+            response.status(200).json(
+                res.data.map(movie => {
+                    const icon = movie.stream_icon;
+                    if (Utils.isHttps(icon)) {
+                        return movie;
+                    }
+                    return {
+                        ...movie,
+                        stream_icon: client.urls.resource(request.hostname, icon, request.query.token)
+                    }
+                })
+            );
+        }catch(error){
+            response.status(500).json({message:error.message})
+        }
     }
+
+    async listSeries(request, response) {
+        const res = await client.getAllSeries(JSON.parse(request.token));
+        try{
+            response.status(200).json(
+                res.data.map(serie => {
+                    const icon = serie.cover;
+                    if (Utils.isHttps(icon)) {
+                        return serie;
+                    }
+                    return {
+                        ...serie,
+                        cover: client.urls.resource(request.hostname, icon, request.query.token)
+                    }
+                })
+            );
+        }catch(error){
+            response.status(500).json({message:error.message})
+        }
+    }
+
+    async listChannels(request, response) {
+        try{
+            const res = await client.getAllChannels(JSON.parse(request.token));
+            console.log(res, res.data)
+            response.status(200).json(
+                res.data.map(channel => {
+                    const icon = channel.stream_icon;
+                    if (Utils.isHttps(icon)) {
+                        return channel;
+                    }
+                    return {
+                        ...channel,
+                        stream_icon: client.urls.resource(request.hostname, icon, request.query.token)
+                    }
+                })
+            );
+        }catch(error){
+            response.status(500).json({message:error.message})
+        }
+    }
+
 
     async listMoviesCategory(request, response){
         try{

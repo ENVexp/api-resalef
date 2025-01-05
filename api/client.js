@@ -40,6 +40,7 @@ module.exports = new Client();*/
 
 import axios from 'axios';
 import config from './config.js';
+import token from './token.js';
 
 class Client {
 
@@ -47,6 +48,12 @@ class Client {
         this.urls = {
             movies(token){
                 return `${token.dns}/player_api.php?username=${token.username}&password=${token.password}&action=get_vod_streams`;
+            },
+            series(token){
+                return `${token.dns}/player_api.php?username=${token.username}&password=${token.password}&action=get_series`;
+            },
+            channels(token){
+                return `${token.dns}/player_api.php?username=${token.username}&password=${token.password}&action=get_live_streams`;
             },
             urlCategoryMovies(dns, username, password){
                 return `${dns}player_api.php?username=${username}&password=${password}&action=get_vod_categories`;
@@ -61,8 +68,12 @@ class Client {
                 return `${dns}/player_api.php?username=${username}&password=${password}`;
             },
             resource:(hostname, url, tokenValue)=>{
-                if(hostname == 'localhost') hostname = `${hostname}:${config.port}`;
+                if(hostname == 'localhost'){
+                     return `http://${hostname}:${config.port + config.baseUrl}/resource?url=${url}&token=${tokenValue}`
+                }
                 return `https://${hostname + config.baseUrl}/resource?url=${url}&token=${tokenValue}`
+               /* if(hostname == 'localhost') hostname = `${hostname}:${config.port}`;
+                return `https://${hostname + config.baseUrl}/resource?url=${url}&token=${tokenValue}`*/
             }
         }
     }
@@ -81,6 +92,14 @@ class Client {
 
     getAllMovies(token) {
         return axios.get(this.urls.movies(token));
+    }
+
+    getAllChannels(token) {
+        return axios.get(this.urls.channels(token));
+    }
+
+    getAllSeries(token) {
+        return axios.get(this.urls.series(token));
     }
 
     getUserInfo(dns, username, password){
