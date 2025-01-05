@@ -55,6 +55,9 @@ class Client {
             channels(token){
                 return `${token.dns}/player_api.php?username=${token.username}&password=${token.password}&action=get_live_streams`;
             },
+            player(token, streamType, streamId, extension){
+                return `${token.dns +streamType + '/'+ token.username +'/'+ token.password + '/' + streamId + '.' + extension}`;
+            },
             serieDetails(token, id){
                 return `${token.dns}/player_api.php?username=${token.username}&password=${token.password}&action=get_series_info&series_id=${id}`
             },
@@ -77,6 +80,11 @@ class Client {
                 return `https://${hostname + config.baseUrl}/resource?url=${url}&token=${tokenValue}`
             }
         }
+    }
+
+    getPlayer(token, streamType, streamId, extension){
+        console.log(this.urls.player(token, streamType, streamId, extension));
+        return axios.get(this.urls.player(token, streamType, streamId, extension))
     }
 
     getSeriesCategory(token){

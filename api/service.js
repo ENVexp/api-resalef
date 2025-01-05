@@ -102,6 +102,7 @@ class Service {
         this.login = this.login.bind(this);
         this.listMovies = this.listMovies.bind(this);
         this.listSeries = this.listSeries.bind(this);
+        this.player = this.player.bind(this);
         this.serieDetails = this.serieDetails.bind(this);
         this.listChannels = this.listChannels.bind(this);
         this.listMoviesCategory = this.listMoviesCategory.bind(this);
@@ -260,6 +261,62 @@ class Service {
         }
     }
 
+
+    async player(request, response) {
+        if (!request.query.type) {
+            response.status(400).json({ message: 'type é obrigatorio' })
+            return;
+        }
+        if (!request.query.id) {
+            response.status(400).json({ message: 'id é obrigatorio' })
+            return;
+        }
+        if (!request.query.extension) {
+            response.status(400).json({ message: 'extension é obrigatorio' })
+            return;
+        }
+        try {
+            const res = await client.getPlayer(
+                JSON.parse(request.token),
+                request.query.type,
+                request.query.id,
+                request.query.extension
+            );
+
+            const responseUrl = res.request.res.responseUrl;
+            const redirectUrl = responseUrl; // Exemplo: verifica o cabeçalho 'Location'
+
+            if (redirectUrl) {
+                // Redireciona o cliente para o link obtido
+                return response.redirect(redirectUrl);
+            }
+            console.log(res)
+            
+            // Se não houver redirecionamento, responde com o conteúdo da requisição
+            response.status(res.status).send(res.data);
+        } catch (error) {
+            response.status(500).json({ error: error.message })
+        }
+        /* try {
+             const res = await client.getPlayer(
+                 JSON.parse(request.token),
+                 request.query.type,
+                 request.query.id,
+                 request.query.extension
+             );
+             
+            // response.setHeader('Content-Type', res.headers['content-type'] || 'application/x-mpegurl');
+             //response.setHeader('Content-Length', res.headers['content-length'] || undefined);
+           
+             Object.entries(res.headers).forEach(([key, value]) => {
+                 response.setHeader(key, value);
+             });
+             console.log(res.headers.getUserAgent());
+             res.data.pipe(response);
+         } catch (error) {
+             response.status(500).json({ error: error.message })
+         }*/
+    }
 
     async userInfo(request, response) {
         const res = await client.getUserInfo();

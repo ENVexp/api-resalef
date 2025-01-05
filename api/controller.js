@@ -80,6 +80,7 @@ class Controller {
         this.#get('/movies/category', service.listMoviesCategory)
         this.#get('/channels/category', service.listChannelsCategory)
         this.#get('/series/category', service.listSeriesCategory)
+        this.#get('/player', service.player);
         this.#get('/resource', service.loadResource);
         this.#get('/userinfo', service.userInfo);
         this.#get('/login', service.login);
