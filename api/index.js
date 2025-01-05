@@ -87,6 +87,7 @@ const list = [
             case '/login':
             case '/routers':
             case '/generateToken':
+            case '/docs':
                 req.requireToken = false;
                 break;
             default:

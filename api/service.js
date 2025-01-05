@@ -101,14 +101,24 @@ class Service {
         //permite ser usado como callback
         this.login = this.login.bind(this);
         this.listMovies = this.listMovies.bind(this);
+        this.listMoviesCategory = this.listMoviesCategory.bind(this);
+        this.listChannelsCategory = this.listChannelsCategory.bind(this);
+        this.listSeriesCategory = this.listSeriesCategory.bind(this);
         this.userInfo = this.userInfo.bind(this);
         this.loadResource = this.loadResource.bind(this);
         this.token = this.token.bind(this);
+        this.docs = this.docs.bind(this);
     }
 
     async token(request, response) {
         // Caminho absoluto para o arquivo token.html
         const filePath = path.resolve(__dirname, '../public/token.html');
+        response.sendFile(filePath);
+    }
+
+    async docs(request, response) {
+        // Caminho absoluto para o arquivo token.html
+        const filePath = path.resolve(__dirname, '../public/docs.html');
         response.sendFile(filePath);
     }
 
@@ -160,6 +170,32 @@ class Service {
         );
     }
 
+    async listMoviesCategory(request, response){
+        try{
+            const res = await client.getMoviesCategory(JSON.parse(request.token));
+            response.status(200).json(res.data);
+        }catch(error){
+            response.status(500).json({message:error.message})
+        }
+    }
+
+    async listChannelsCategory(request, response){
+        try{
+            const res = await client.getChannelsCategory(JSON.parse(request.token));
+            response.status(200).json(res.data);
+        }catch(error){
+            response.status(500).json({message:error.message})
+        }
+    }
+
+    async listSeriesCategory(request, response){
+        try{
+            const res = await client.getSeriesCategory(JSON.parse(request.token));
+            response.status(200).json(res.data);
+        }catch(error){
+            response.status(500).json({message:error.message})
+        }
+    }
     
 
     async userInfo(request, response) {

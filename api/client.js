@@ -48,6 +48,15 @@ class Client {
             movies(token){
                 return `${token.dns}/player_api.php?username=${token.username}&password=${token.password}&action=get_vod_streams`;
             },
+            urlCategoryMovies(dns, username, password){
+                return `${dns}player_api.php?username=${username}&password=${password}&action=get_vod_categories`;
+            },
+            urlCategoryChannels(dns, username, password){
+                return `${dns}player_api.php?username=${username}&password=${password}&action=get_live_categories`;
+            },
+            urlCategorySeries(dns, username, password){
+                return `${dns}player_api.php?username=${username}&password=${password}&action=get_series_categories`;
+            },
             userInfo(dns, username, password){
                 return `${dns}/player_api.php?username=${username}&password=${password}`;
             },
@@ -56,6 +65,18 @@ class Client {
                 return `https://${hostname + config.baseUrl}/resource?url=${url}&token=${tokenValue}`
             }
         }
+    }
+
+    getSeriesCategory(token){
+        return axios.get(this.urls.urlCategorySeries(token.dns, token.username, token.password));
+    }
+
+    getChannelsCategory(token){
+        return axios.get(this.urls.urlCategoryChannels(token.dns, token.username, token.password));
+    }
+
+    getMoviesCategory(token){
+        return axios.get(this.urls.urlCategoryMovies(token.dns, token.username, token.password));
     }
 
     getAllMovies(token) {

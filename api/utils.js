@@ -66,6 +66,18 @@ class Utils{
         return `${dns}player_api.php?username=${username}&password=${password}&action=get_vod_streams`;
     }
 
+    static urlCategoryChannels(dns, username, password){
+        return `${dns}player_api.php?username=${username}&password=${password}&action=get_live_categories`;
+    }
+
+    static urlCategoryMovies(dns, username, password){
+        return `${dns}player_api.php?username=${username}&password=${password}&action=get_vod_categories`;
+    }
+
+    static urlCategorySeries(dns, username, password){
+        return `${dns}player_api.php?username=${username}&password=${password}&action=get_series`;
+    }
+
     static getChannelsUrl(dns, username, password){
         return `${dns}player_api.php?username=${username}&password=${password}&action=get_live_streams`;
     }
