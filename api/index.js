@@ -1,7 +1,10 @@
-const express = require('express');
-const cors = require("cors");
+//const express = require('express');
+//const cors = require("cors");
+import express from "express";
+import config from "./config.js";
 const app = express();
-const config = require('./config.js');
+
+/*const config = require('./config.js');
 const controller = require('./controller.js');
 const token = require('./token.js');
 const router = controller.getRouter();
@@ -52,13 +55,13 @@ app.use(express.static('public'));
 app.use(cors());
 //apply middlewares
 middlewares.forEach(middleware => app.use(middleware));
-app.use(config.baseUrl, router);
+app.use(config.baseUrl, router);*/
 
 
 
 const port = config.port;
-app.listen(port, () => {
+/*app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
-});
+});*/
 
-module.exports = app;
+export default app;

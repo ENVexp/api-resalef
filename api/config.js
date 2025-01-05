@@ -1,8 +1,10 @@
+import dotenv from 'dotenv';
+
 class Config {
     static #instance
     constructor(){
         if (process.env.NODE_ENV !== 'production') {
-            require('dotenv').config();
+            dotenv.config();
         }
         this.baseUrl = '/easyapp/api';
         this.port = process.env.PORT;
@@ -19,4 +21,4 @@ class Config {
     }
 }
 
-module.exports = new Config();
+export default new Config();
