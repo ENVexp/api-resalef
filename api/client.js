@@ -55,6 +55,9 @@ class Client {
             channels(token){
                 return `${token.dns}/player_api.php?username=${token.username}&password=${token.password}&action=get_live_streams`;
             },
+            serieDetails(token, id){
+                return `${token.dns}/player_api.php?username=${token.username}&password=${token.password}&action=get_series_info&series_id=${id}`
+            },
             urlCategoryMovies(dns, username, password){
                 return `${dns}player_api.php?username=${username}&password=${password}&action=get_vod_categories`;
             },
@@ -72,8 +75,6 @@ class Client {
                      return `http://${hostname}:${config.port + config.baseUrl}/resource?url=${url}&token=${tokenValue}`
                 }
                 return `https://${hostname + config.baseUrl}/resource?url=${url}&token=${tokenValue}`
-               /* if(hostname == 'localhost') hostname = `${hostname}:${config.port}`;
-                return `https://${hostname + config.baseUrl}/resource?url=${url}&token=${tokenValue}`*/
             }
         }
     }
@@ -100,6 +101,10 @@ class Client {
 
     getAllSeries(token) {
         return axios.get(this.urls.series(token));
+    }
+
+    getSerieDetails(token, id){
+        return axios.get(this.urls.serieDetails(token, id))
     }
 
     getUserInfo(dns, username, password){

@@ -75,6 +75,7 @@ class Controller {
         this.#get('/docs', service.docs)
         this.#get('/movies', service.listMovies);
         this.#get('/series', service.listSeries);
+        this.#get('/series/details', service.serieDetails);
         this.#get('/channels', service.listChannels);
         this.#get('/movies/category', service.listMoviesCategory)
         this.#get('/channels/category', service.listChannelsCategory)

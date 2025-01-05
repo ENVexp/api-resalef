@@ -102,6 +102,7 @@ class Service {
         this.login = this.login.bind(this);
         this.listMovies = this.listMovies.bind(this);
         this.listSeries = this.listSeries.bind(this);
+        this.serieDetails = this.serieDetails.bind(this);
         this.listChannels = this.listChannels.bind(this);
         this.listMoviesCategory = this.listMoviesCategory.bind(this);
         this.listChannelsCategory = this.listChannelsCategory.bind(this);
@@ -158,7 +159,7 @@ class Service {
 
     async listMovies(request, response) {
         const res = await client.getAllMovies(JSON.parse(request.token));
-        try{
+        try {
             response.status(200).json(
                 res.data.map(movie => {
                     const icon = movie.stream_icon;
@@ -171,33 +172,47 @@ class Service {
                     }
                 })
             );
-        }catch(error){
-            response.status(500).json({message:error.message})
+        } catch (error) {
+            response.status(500).json({ message: error.message })
         }
     }
 
     async listSeries(request, response) {
         const res = await client.getAllSeries(JSON.parse(request.token));
-        try{
+        try {
             response.status(200).json(
                 res.data.map(serie => {
                     const icon = serie.cover;
-                   /* if (Utils.isHttps(icon)) {
-                        return serie;
-                    }*/
+                    /* 
+                    removido para resolver o problema de carregar em todas
+                    if (Utils.isHttps(icon)) {
+                         return serie;
+                     }*/
                     return {
                         ...serie,
                         cover: client.urls.resource(request.hostname, icon, request.query.token)
                     }
                 })
             );
-        }catch(error){
-            response.status(500).json({message:error.message})
+        } catch (error) {
+            response.status(500).json({ message: error.message })
+        }
+    }
+
+    async serieDetails(request, response) {
+        if (!request.query.id) {
+            response.status(400).json({ message: 'id obrigatorio' })
+        }
+        try {
+            const res = await client.getSerieDetails(JSON.parse(request.token), request.query.id);
+            response.send(res.data);
+        } catch (error) {
+            response.status(500).json({ message: error.message })
         }
     }
 
     async listChannels(request, response) {
-        try{
+        try {
             const res = await client.getAllChannels(JSON.parse(request.token));
             console.log(res, res.data)
             response.status(200).json(
@@ -212,39 +227,39 @@ class Service {
                     }
                 })
             );
-        }catch(error){
-            response.status(500).json({message:error.message})
+        } catch (error) {
+            response.status(500).json({ message: error.message })
         }
     }
 
 
-    async listMoviesCategory(request, response){
-        try{
+    async listMoviesCategory(request, response) {
+        try {
             const res = await client.getMoviesCategory(JSON.parse(request.token));
             response.status(200).json(res.data);
-        }catch(error){
-            response.status(500).json({message:error.message})
+        } catch (error) {
+            response.status(500).json({ message: error.message })
         }
     }
 
-    async listChannelsCategory(request, response){
-        try{
+    async listChannelsCategory(request, response) {
+        try {
             const res = await client.getChannelsCategory(JSON.parse(request.token));
             response.status(200).json(res.data);
-        }catch(error){
-            response.status(500).json({message:error.message})
+        } catch (error) {
+            response.status(500).json({ message: error.message })
         }
     }
 
-    async listSeriesCategory(request, response){
-        try{
+    async listSeriesCategory(request, response) {
+        try {
             const res = await client.getSeriesCategory(JSON.parse(request.token));
             response.status(200).json(res.data);
-        }catch(error){
-            response.status(500).json({message:error.message})
+        } catch (error) {
+            response.status(500).json({ message: error.message })
         }
     }
-    
+
 
     async userInfo(request, response) {
         const res = await client.getUserInfo();
