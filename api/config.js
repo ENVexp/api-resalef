@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 class Config {
     static #instance
     constructor(){
+        console.log(process.env.NODE_ENV)
+        console.log(process.env.SERVICE_ON)
         if (process.env.NODE_ENV !== 'production') {
             dotenv.config();
         }
