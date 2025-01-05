@@ -87,6 +87,12 @@ module.exports = new Service();*/
 import Utils from './utils.js';
 import client from './client.js';
 import config from './config.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Simula o __dirname
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 
 class Service {
 
@@ -96,6 +102,13 @@ class Service {
         this.listMovies = this.listMovies.bind(this);
         this.userInfo = this.userInfo.bind(this);
         this.loadResource = this.loadResource.bind(this);
+        this.token = this.token.bind(this);
+    }
+
+    async token(request, response) {
+        // Caminho absoluto para o arquivo token.html
+        const filePath = path.resolve(__dirname, '../public/token.html');
+        response.sendFile(filePath);
     }
 
     async login(request, response) {

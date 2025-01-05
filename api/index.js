@@ -86,7 +86,7 @@ const list = [
         switch (clearPath) {
             case '/login':
             case '/routers':
-            case '/token.html':
+            case '/token':
                 req.requireToken = false;
                 break;
             default:
@@ -112,15 +112,14 @@ const list = [
         }
     }
 ];
-app.use(config.baseUrl, express.static('public'));
+
 //app.use(express.static('public'));
 
 //app.use(cors());
 //apply middlewares
 list.forEach(e => app.use(e));
 app.use(config.baseUrl, router);
-
-
+//app.use(config.baseUrl, express.static('public'));
 
 /*const port = 3002;
 app.listen(port, () => {
