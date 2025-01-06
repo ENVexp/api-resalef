@@ -334,8 +334,11 @@ class Service {
             console.log('chamado :'+ request.query.url)
             const res = await client.getStream(request.query.url);
             
-            response.setHeader('Content-Type', res.headers['content-type'] || 'application/octet-stream');
-            response.setHeader('Content-Length', res.headers['content-length'] || undefined);
+            Object.entries(res.headers).forEach(([key, value]) => {
+                response.setHeader(key, value);
+            });
+            //response.setHeader('Content-Type', res.headers['content-type'] || 'application/octet-stream');
+            //response.setHeader('Content-Length', res.headers['content-length'] || undefined);
             res.data.pipe(response);
         } catch (error) {
             response.status(500).json({ error: error.message })
