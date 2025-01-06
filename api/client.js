@@ -73,11 +73,15 @@ class Client {
             userInfo(dns, username, password){
                 return `${dns}/player_api.php?username=${username}&password=${password}`;
             },
-            resource:(hostname, url, tokenValue)=>{
+            resource:(hostname, url, tokenValue='')=>{
                 if(hostname == 'localhost'){
+                    return `http://${hostname}:${config.port + config.baseUrl}/resource?url=${encodeURIComponent(url)}`
+               }
+               return `https://${hostname + config.baseUrl}/resource?url=${encodeURIComponent(url)}`
+               /* if(hostname == 'localhost'){
                      return `http://${hostname}:${config.port + config.baseUrl}/resource?url=${url}&token=${tokenValue}`
                 }
-                return `https://${hostname + config.baseUrl}/resource?url=${url}&token=${tokenValue}`
+                return `https://${hostname + config.baseUrl}/resource?url=${url}&token=${tokenValue}`*/
             }
         }
     }

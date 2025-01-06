@@ -75,7 +75,7 @@ const router = controller.getRouter();
 const list = [
     (req, res, next) => {
         if (config.serviceOn === 'true') {
-           next();
+            next();
         } else {
             res.status(500).json({ message: 'Serviço indisponivel' })
         }
@@ -89,6 +89,7 @@ const list = [
             case '/routers':
             case '/generateToken':
             case '/docs':
+            case '/resource':
                 req.requireToken = false;
                 break;
             default:

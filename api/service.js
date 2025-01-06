@@ -283,14 +283,20 @@ class Service {
                 request.query.extension
             );
 
+            //console.log(res)
             const responseUrl = res.request.res.responseUrl;
             const redirectUrl = responseUrl; // Exemplo: verifica o cabeçalho 'Location'
 
             if (redirectUrl) {
                 // Redireciona o cliente para o link obtido
-                return response.redirect(redirectUrl);
+                const u =  client.urls.resource(request.hostname, redirectUrl);
+                console.log('red: '+ redirectUrl)
+                console.log('montado: ' +u)
+                return response.redirect(
+                   u
+                );
             }
-            console.log(res)
+            console.log('teste' + res)
             
             // Se não houver redirecionamento, responde com o conteúdo da requisição
             response.status(res.status).send(res.data);
@@ -325,7 +331,9 @@ class Service {
 
     async loadResource(request, response) {
         try {
+            console.log('chamado :'+ request.query.url)
             const res = await client.getStream(request.query.url);
+            
             response.setHeader('Content-Type', res.headers['content-type'] || 'application/octet-stream');
             response.setHeader('Content-Length', res.headers['content-length'] || undefined);
             res.data.pipe(response);
