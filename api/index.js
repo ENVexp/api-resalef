@@ -90,6 +90,7 @@ const list = [
             case '/generateToken':
             case '/docs':
             case '/resource':
+            case '/video':
                 req.requireToken = false;
                 break;
             default:
@@ -117,6 +118,11 @@ const list = [
 ];
 
 //app.use(express.static('public'));
+app.get('*', (req, res, next) => {
+    // Permitir que as requisições genéricas passem sem erro
+    next();
+  });
+  
 
 app.use(cors());
 //apply middlewares

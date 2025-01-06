@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HLS Video Player</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+    video {
+      width: 80%;
+      max-width: 720px;
+      height: auto;
+      margin-top: 20px;
+    }
+    #videoLink {
+      width: 80%;
+      max-width: 720px;
+      padding: 15px;
+      font-size: 16px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>HLS Video Player</h1>
+  <input type="text" id="videoLink" placeholder="Enter .m3u8 URL" value="http://localhost:3000/easyapp/api/player?type=live&id=188324&extension=m3u8&token=BEQKzq-lyr3pPikCGLoj56vcLUrhEHGf3SgO75C1FgRbQ-z675sIFtXjv8KPm8pnfTciHkEQpNNGOXHH70X4rCGSshtmSrONMjqdnjJfi18" />
+  <br>
+  <button onclick="playVideo()">Play Video</button>
+  <br>
+  <video id="videoPlayer" controls></video>
+
+  <!-- HLS.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    function playVideo() {
+      const videoLink = document.getElementById('videoLink').value;
+      const videoPlayer = document.getElementById('videoPlayer');
+
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(videoLink);
+        hls.attachMedia(videoPlayer);
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+          videoPlayer.play();
+        });
+      } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+        // For Safari (which supports HLS natively)
+        videoPlayer.src = videoLink;
+        videoPlayer.addEventListener('loadedmetadata', function () {
+          videoPlayer.play();
+        });
+      } else {
+        alert('Your browser does not support HLS playback.');
+      }
+    }
+  </script>
+</body>
+</html>

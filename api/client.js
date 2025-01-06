@@ -86,6 +86,9 @@ class Client {
         }
     }
 
+    get(url){
+       return axios.get(url);
+    }
     getPlayer(token, streamType, streamId, extension){
         console.log(this.urls.player(token, streamType, streamId, extension));
         return axios.get(this.urls.player(token, streamType, streamId, extension))

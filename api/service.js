@@ -103,6 +103,7 @@ class Service {
         this.listMovies = this.listMovies.bind(this);
         this.listSeries = this.listSeries.bind(this);
         this.player = this.player.bind(this);
+        this.videoPlayer = this.videoPlayer.bind(this);
         this.serieDetails = this.serieDetails.bind(this);
         this.listChannels = this.listChannels.bind(this);
         this.listMoviesCategory = this.listMoviesCategory.bind(this);
@@ -123,6 +124,12 @@ class Service {
     async docs(request, response) {
         // Caminho absoluto para o arquivo token.html
         const filePath = path.resolve(__dirname, '../public/docs.html');
+        response.sendFile(filePath);
+    }
+
+    async videoPlayer(request, response) {
+        // Caminho absoluto para o arquivo token.html
+        const filePath = path.resolve(__dirname, '../public/player.html');
         response.sendFile(filePath);
     }
 
@@ -289,12 +296,17 @@ class Service {
 
             if (redirectUrl) {
                 // Redireciona o cliente para o link obtido
-                const u =  client.urls.resource(request.hostname, redirectUrl);
-                console.log('red: '+ redirectUrl)
+                const c = await client.get(redirectUrl);
+                console.log(c)
+                response.json( c.data)
+                return;
+                /*const u =  client.urls.resource(request.hostname, redirectUrl);
+
+               console.log('red: '+ redirectUrl)
                 console.log('montado: ' +u)
                 return response.redirect(
                    u
-                );
+                );*/
             }
             console.log('teste' + res)
             
