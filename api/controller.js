@@ -85,6 +85,8 @@ class Controller {
         this.#get('/resource', service.loadResource);
         this.#get('/userinfo', service.userInfo);
         this.#get('/login', service.login);
+        this.#get('/teste', service.teste);
+        this.#get('/playerChannel', service.playerChannel);
         this.#get('/routers', (req, res) => {
             const list = this.#router.stack.map(route => {
                 const methods = Object.keys(route.route.methods).join(' ').toUpperCase();

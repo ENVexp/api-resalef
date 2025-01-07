@@ -3,31 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HLS Video Player</title>
+  <title>TS Player with mpegts.js</title>
+  <script src="https://cdn.jsdelivr.net/npm/mpegts.js@latest"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
     }
-    video {
+    textarea {
       width: 80%;
-      max-width: 720px;
-      height: auto;
-      margin-top: 20px;
-    }
-    #videoLink {
-      width: 80%;
-      max-width: 720px;
-      padding: 15px;
-      font-size: 16px;
-      margin-top: 10px;
+      height: 100px;
       margin-bottom: 10px;
+      font-size: 16px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
     button {
       padding: 10px 20px;
       font-size: 16px;
-      background-color: #007BFF;
+      background-color: #007bff;
       color: white;
       border: none;
       border-radius: 5px;
@@ -36,40 +37,73 @@
     button:hover {
       background-color: #0056b3;
     }
+    video {
+      width: 80%;
+      max-width: 800px;
+      height: auto;
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
-  <h1>HLS Video Player</h1>
-  <input type="text" id="videoLink" placeholder="Enter .m3u8 URL" value="http://localhost:3000/easyapp/api/player?type=live&id=188324&extension=m3u8&token=BEQKzq-lyr3pPikCGLoj56vcLUrhEHGf3SgO75C1FgRbQ-z675sIFtXjv8KPm8pnfTciHkEQpNNGOXHH70X4rCGSshtmSrONMjqdnjJfi18" />
-  <br>
-  <button onclick="playVideo()">Play Video</button>
-  <br>
-  <video id="videoPlayer" controls></video>
 
-  <!-- HLS.js Library -->
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <textarea id="tsLink" placeholder="Enter .ts file link here">http://chead.cc/live/Ronnyy/root@2424/188324.ts</textarea>
+  <button onclick="playTS()">Play Video</button>
+  <video id="videoElement" controls></video>
+
   <script>
-    function playVideo() {
-      const videoLink = document.getElementById('videoLink').value;
-      const videoPlayer = document.getElementById('videoPlayer');
+    function playTS() {
+      const tsLink = document.getElementById('tsLink').value;
+      const videoElement = document.getElementById('videoElement');
 
-      if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(videoLink);
-        hls.attachMedia(videoPlayer);
-        hls.on(Hls.Events.MANIFEST_PARSED, function () {
-          videoPlayer.play();
-        });
-      } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
-        // For Safari (which supports HLS natively)
-        videoPlayer.src = videoLink;
-        videoPlayer.addEventListener('loadedmetadata', function () {
-          videoPlayer.play();
-        });
-      } else {
-        alert('Your browser does not support HLS playback.');
+      if (!mpegts.getFeatureList().mseLivePlayback) {
+        alert('Your browser does not support MSE live playback required by mpegts.js.');
+        return;
       }
+
+      if (tsLink.endsWith('.ts')) {
+      //  alert('Please provide a valid .ts link.');
+      mpegts.createPlayer
+
+      const player = mpegts.createPlayer({
+        type: 'mse',
+        isLive: true,
+        url: tsLink
+      });
+
+      player.attachMediaElement(videoElement);
+      player.load();
+
+      player.play().catch(err => {
+        videoElement.src = tsLink;
+        console.error('Error playing video:', err);
+        alert('Unable to play the video. Check the link or your browser compatibility.');
+      });
+    }else{
+        videoElement.src = tsLink;
+    }
+    /*  if (!tsLink.endsWith('.ts')) {
+        alert('Please provide a valid .ts link.');
+        return;
+      }
+
+      const player = mpegts.createPlayer({
+        type: 'mse',
+        isLive: true,
+        url: tsLink
+      });
+
+      player.attachMediaElement(videoElement);
+      player.load();
+
+      player.play().catch(err => {
+        console.error('Error playing video:', err);
+        alert('Unable to play the video. Check the link or your browser compatibility.');
+      });*/
     }
   </script>
+
 </body>
 </html>

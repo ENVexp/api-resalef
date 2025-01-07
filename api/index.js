@@ -91,6 +91,8 @@ const list = [
             case '/docs':
             case '/resource':
             case '/video':
+            case '/teste':
+            case '/playerChannel':
                 req.requireToken = false;
                 break;
             default:

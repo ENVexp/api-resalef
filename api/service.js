@@ -90,6 +90,7 @@ import config from './config.js';
 import path from 'path';
 import token from './token.js';
 import { fileURLToPath } from 'url';
+import axios from 'axios';
 
 // Simula o __dirname
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -113,6 +114,15 @@ class Service {
         this.loadResource = this.loadResource.bind(this);
         this.token = this.token.bind(this);
         this.docs = this.docs.bind(this);
+        this.teste = this.teste.bind(this);
+        this.playerChannel = this.playerChannel.bind(this);
+    }
+
+    async teste(request, response){
+       const res = await axios.get('http://chead.cc/live/Ronnyy/root@2424/188324.ts');
+       console.log(res)
+      // const host = 'http://'+res.request.res.responseUrl.split('/')[2];
+       //console.log(host);
     }
 
     async token(request, response) {
@@ -132,6 +142,13 @@ class Service {
         const filePath = path.resolve(__dirname, '../public/player.html');
         response.sendFile(filePath);
     }
+
+    async playerChannel(request, response) {
+        // Caminho absoluto para o arquivo token.html
+        const filePath = path.resolve(__dirname, '../public/player_channel.html');
+        response.sendFile(filePath);
+    }
+
 
     async login(request, response) {
         if (!request.query.username) {
