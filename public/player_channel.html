@@ -3,41 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Video Streaming with MSE</title>
+  <title>TS Video Player</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    video {
+      width: 80%;
+      max-width: 800px;
+      height: auto;
+    }
+  </style>
 </head>
 <body>
+  <h1>TS Video Player</h1>
 
-  <video id="video" controls autoplay></video>
+  <!-- Elemento de vídeo -->
+  <video id="video-player" controls muted></video>
 
+  <!-- Biblioteca mpegts.js -->
+  <script src="https://cdn.jsdelivr.net/npm/mpegts.js@latest"></script>
   <script>
-    // Função para pegar o valor do query param
+    // Função para obter parâmetros da URL
     function getQueryParam(param) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(param);
     }
 
-    // Obtendo o link do vídeo via query param 'name'
-    const videoUrl = getQueryParam('name');  // Ex: ?name=https://example.com/video.mp4
+    // Obter URL do vídeo
+    const videoUrl = getQueryParam('url');
+
+    // Inicializar o player
+    const videoElement = document.getElementById('video-player');
 
     if (videoUrl) {
-      const videoElement = document.getElementById('video');
-      const mediaSource = new MediaSource();
-      videoElement.src = URL.createObjectURL(mediaSource);
+      if (mpegts.getFeatureList().mseLivePlayback) {
+        const player = mpegts.createPlayer({
+          type: 'mpegts', // Tipo de arquivo
+          isLive:true,
+          url: videoUrl, // URL do vídeo
+        });
 
-      mediaSource.addEventListener('sourceopen', () => {
-        const sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.64001F, mp4a.40.2"');
+        // Associar o player ao elemento de vídeo
+        player.attachMediaElement(videoElement);
+        player.load();
 
-        fetch(videoUrl)  // Usando o link do vídeo obtido nos query params
-          .then(response => response.arrayBuffer())
-          .then(data => {
-            sourceBuffer.appendBuffer(data);
-          })
-          .catch(error => console.error('Erro ao carregar o vídeo:', error));
-      });
+        // Opcional: reproduzir automaticamente
+        player.play();
+      } else {
+        alert('Seu navegador não suporta MSE (Media Source Extensions).');
+      }
     } else {
-      console.error('Nenhum link de vídeo fornecido nos query params.');
+      alert('Nenhum vídeo encontrado nos parâmetros da URL.');
     }
   </script>
-
 </body>
 </html>
